@@ -55,7 +55,7 @@ class CartRepositoryTest {
         this.category = categoryRepository.findCategoryByName(CategoryType.ELEKTRONIKA);
         this.product = new Product(PRODUCT_NAME, DESCRIPTION, PRICE, this.category, QUANTITY);
         this.productRepository.createProduct(product);
-        this.user = this.userRepository.create(new User("Mikolaj"));
+        this.user = this.userRepository.create(new User("Rafal"));
         this.cart = new Cart();
         this.cartLineItem = new CartLineItem(this.product, this.cart, 1, LocalDateTime.now(), LocalDateTime.now(), 2L);
         this.cartItems = new ArrayList<>();

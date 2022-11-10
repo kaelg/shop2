@@ -8,14 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import pl.waw.great.shop.exception.CartIsEmptyException;
 import pl.waw.great.shop.exception.InsufficientProductQuantityException;
 import pl.waw.great.shop.exception.UserWithGivenNameNotExistsException;
-import pl.waw.great.shop.model.Order;
-import pl.waw.great.shop.model.OrderLineItem;
-import pl.waw.great.shop.model.Product;
-import pl.waw.great.shop.model.User;
+import pl.waw.great.shop.model.*;
 import pl.waw.great.shop.model.dto.OrderDto;
 import pl.waw.great.shop.model.mapper.OrderLineMapper;
 import pl.waw.great.shop.model.mapper.OrderMapper;
-import pl.waw.great.shop.model.Cart;
 import pl.waw.great.shop.repository.CartRepository;
 import pl.waw.great.shop.repository.OrderRepository;
 import pl.waw.great.shop.repository.ProductRepository;
@@ -23,6 +19,7 @@ import pl.waw.great.shop.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -116,6 +113,20 @@ public class OrderService {
             product.setQuantity(updatedQuantity);
             this.productRepository.updateProduct(product);
         });
+    }
+
+    public OrderDto createAuctionWinnerOrder(Auction auction, User winner) {
+        OrderLineItem orderLineItem = new OrderLineItem(auction, auction.getQuantity());
+        List<OrderLineItem> orderLineItems = Collections.singletonList(orderLineItem);
+        Order order = new Order(auction.getPrice(),
+                winner,
+                orderLineItems,
+                LocalDateTime.now());
+
+        OrderDto orderDto = orderMapper.orderToDto(this.orderRepository.create(order));
+        this.updateProductsQuantity(orderLineItems);
+
+        return orderDto;
     }
 
     private User getAuthenticatedUser() {

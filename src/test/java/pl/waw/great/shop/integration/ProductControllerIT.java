@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import pl.waw.great.shop.config.AuctionType;
 import pl.waw.great.shop.config.CategoryType;
 import pl.waw.great.shop.model.Category;
 import pl.waw.great.shop.model.dto.ProductDTO;
@@ -51,7 +52,7 @@ class ProductControllerIT {
     @BeforeEach
     public void setUp() {
 
-        this.productToUpdate = new ProductDTO(PRODUCT_TITLE_2, DESCRIPTION_2, PRICE_2, CATEGORY, QUANTITY);
+        this.productToUpdate = new ProductDTO(PRODUCT_TITLE_2, DESCRIPTION_2, PRICE_2, CATEGORY, QUANTITY, AuctionType.KUP_TERAZ);
 
         requestSpecification = new RequestSpecBuilder()
                 .setBaseUri("http://localhost:8080/")
@@ -85,7 +86,7 @@ class ProductControllerIT {
 
     @Test
     void createProduct() {
-        ProductDTO newProduct = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY, QUANTITY);
+        ProductDTO newProduct = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY, QUANTITY, AuctionType.KUP_TERAZ);
         ProductDTO createdProductDto = given().spec(requestSpecification).body(newProduct)
                 .when().post()
                 .then().spec(responseSpecification).extract().body().as(ProductDTO.class);
@@ -96,7 +97,7 @@ class ProductControllerIT {
 
     @Test
     void updateProduct() {
-        ProductDTO newProductData = new ProductDTO("NEW_TITLE", "NEW_DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY, QUANTITY);
+        ProductDTO newProductData = new ProductDTO("NEW_TITLE", "NEW_DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY, QUANTITY, AuctionType.KUP_TERAZ);
 
         ProductDTO updatedProductDto = given().pathParam("id", productToUpdateId)
                 .spec(requestSpecification).body(newProductData)

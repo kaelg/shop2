@@ -1,18 +1,19 @@
 package pl.waw.great.shop.controller;
 
+import org.quartz.SchedulerException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import pl.waw.great.shop.config.AuctionType;
 import pl.waw.great.shop.config.CategoryType;
-import pl.waw.great.shop.model.Product;
 import pl.waw.great.shop.model.dto.*;
 import pl.waw.great.shop.repository.CategoryRepository;
+import pl.waw.great.shop.service.AuctionService;
 import pl.waw.great.shop.service.CartService;
 import pl.waw.great.shop.service.CommentService;
 import pl.waw.great.shop.service.ProductService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
@@ -24,17 +25,25 @@ public class ProductController {
 
     private final CartService cartService;
 
-    public ProductController(ProductService productService, CommentService commentService, CartService cartService, CategoryRepository categoryRepository) {
+    private final AuctionService auctionService;
+
+    public ProductController(ProductService productService, CommentService commentService, CartService cartService, AuctionService auctionService) {
         this.productService = productService;
         this.commentService = commentService;
         this.cartService = cartService;
+        this.auctionService = auctionService;
     }
 
     @PostMapping
-    public ProductDTO createProduct(@Valid @RequestBody ProductDTO productDTO) {
+    public ProductDTO createProduct(@Valid @RequestBody ProductDTO productDTO) throws SchedulerException {
         if (productDTO.getQuantity() == null) {
             productDTO.setQuantity(1L);
         }
+
+        if (!productDTO.getAuctionType().equals(AuctionType.KUP_TERAZ)) {
+            return this.auctionService.create(productDTO);
+        }
+
         return this.productService.createProduct(productDTO);
     }
 
@@ -45,7 +54,7 @@ public class ProductController {
 
 
     @GetMapping("/{title}")
-    public ProductDTO getProductByTitle(@PathVariable String title) {
+    public ProductDTO getProductByTitle(@PathVariable String title){
         return this.productService.getProductByTitle(title);
     }
 

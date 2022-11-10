@@ -2,6 +2,7 @@ package pl.waw.great.shop;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.*;
+import pl.waw.great.shop.config.AuctionType;
 import pl.waw.great.shop.config.CategoryType;
 import pl.waw.great.shop.model.Product;
 import pl.waw.great.shop.model.dto.ProductDTO;
@@ -49,7 +50,8 @@ public class TestController {
                     "test description",
                     BigDecimal.valueOf(Long.parseLong(randomNumeric(1, 5))),
                     CategoryType.values()[index],
-                    2L);
+                    2L,
+                    AuctionType.KUP_TERAZ);
             this.productService.createProduct(productDTO);
         }
         counter += count;

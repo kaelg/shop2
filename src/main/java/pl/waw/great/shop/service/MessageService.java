@@ -20,7 +20,6 @@ public class MessageService {
     public MessageDto create(MessageDto messageDto) {
         Message message = this.messageMapper.messageDtoToMessage(messageDto);
         Message messageCreated = this.messageRepository.create(message);
-        MessageDto messageDtoCreated = this.messageMapper.messageToMessageDto(messageCreated);
-        return messageDtoCreated;
+        return this.messageMapper.messageToMessageDto(messageCreated);
     }
 }

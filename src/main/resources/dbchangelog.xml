@@ -22,5 +22,8 @@
     <include file="db/migrations/013-add-user-coin.sql" relativeToChangelogFile="true"/>
     <include file="db/migrations/014-init-coins.sql" relativeToChangelogFile="true"/>
 
+    <include file="db/migrations/015-add-auction.sql" relativeToChangelogFile="true"/>
+    <include file="db/migrations/016-add-bid.sql" relativeToChangelogFile="true"/>
+    <include file="db/migrations/017-add-product-auction-type.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -8,6 +8,7 @@ import pl.waw.great.shop.model.Category;
 import pl.waw.great.shop.model.Product;
 import pl.waw.great.shop.model.dto.ProductDTO;
 
+
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
@@ -19,5 +20,6 @@ public interface ProductMapper {
     default CategoryType getCategoryType(Category category) {
         return CategoryType.valueOf(category.getName());
     }
+
 
 }

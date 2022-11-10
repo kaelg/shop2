@@ -35,7 +35,7 @@ class OrderRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.user = new User("Mikolaj");
+        this.user = new User("John");
         this.userRepository.create(user);
         this.order = new Order(TOTAL_PRICE, user, orderLineItemList, LocalDateTime.now() );
     }

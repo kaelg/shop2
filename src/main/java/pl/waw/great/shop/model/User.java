@@ -19,10 +19,14 @@ public class User {
     private LocalDateTime updated;
 
     @OneToMany(mappedBy = "user")
-    List<Order> orders;
+    private List<Order> orders;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-    Cart cart;
+    private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    private List<Bid> bids;
+
 
     private Long coins;
 

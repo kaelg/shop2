@@ -1,6 +1,7 @@
 package pl.waw.great.shop.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
+import pl.waw.great.shop.config.AuctionType;
 import pl.waw.great.shop.config.CategoryType;
 import pl.waw.great.shop.exception.ErrorInfo;
 import pl.waw.great.shop.model.Category;
@@ -105,9 +107,9 @@ class ProductControllerTest {
     @BeforeEach
     void setup() {
         this.commentDto = new CommentDto(TEST_NAME, TEST_EMAIL, TEST_TEXT);
-        this.productDTO = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY_NAME, QUANTITY);
+        this.productDTO = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
         this.category = new Category(CATEGORY_NAME.toString());
-        this.toUpdateDto = new ProductDTO(PRODUCT_TITLE_2, DESCRIPTION_2, PRICE_2, CATEGORY_NAME, QUANTITY);
+        this.toUpdateDto = new ProductDTO(PRODUCT_TITLE_2, DESCRIPTION_2, PRICE_2, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
         this.createdProductId = this.productService.createProduct(this.toUpdateDto).getId();
         this.commentService.createComment(this.toUpdateDto.getTitle(), this.commentDto);
     }
@@ -151,7 +153,7 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void createWithBlankTitleShouldThrowException() throws Exception {
-        ProductDTO dtoWithBlankTitle = new ProductDTO("", DESCRIPTION, PRICE_2, CATEGORY_NAME, QUANTITY);
+        ProductDTO dtoWithBlankTitle = new ProductDTO("", DESCRIPTION, PRICE_2, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
         String productDtoAsJson = objectMapper.writeValueAsString(dtoWithBlankTitle);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.post("/products")
@@ -165,7 +167,7 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void createWithBlankDescriptionShouldThrowException() throws Exception {
-        ProductDTO dtoWithBlankDescription = new ProductDTO(PRODUCT_TITLE, "", PRICE_2, CATEGORY_NAME, QUANTITY);
+        ProductDTO dtoWithBlankDescription = new ProductDTO(PRODUCT_TITLE, "", PRICE_2, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
         String productDtoAsJson = objectMapper.writeValueAsString(dtoWithBlankDescription);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.post("/products")
@@ -179,7 +181,7 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void createWithPriceZeroException() throws Exception {
-        ProductDTO dtoWithPriceZero = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, BigDecimal.ZERO, CATEGORY_NAME, QUANTITY);
+        ProductDTO dtoWithPriceZero = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, BigDecimal.ZERO, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
         String productDtoAsJson = objectMapper.writeValueAsString(dtoWithPriceZero);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.post("/products")
@@ -207,7 +209,7 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void updateToDuplicateTitleShouldThrowException() throws Exception {
-        ProductDTO newData = new ProductDTO(PRODUCT_TITLE_2, "TEST DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY_NAME, QUANTITY);
+        ProductDTO newData = new ProductDTO(PRODUCT_TITLE_2, "TEST DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
         String productDtoAsJson = objectMapper.writeValueAsString(newData);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.put("/products/" + this.createdProductId)
@@ -221,7 +223,7 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void updateWithNotExistingIdShouldThrowException() throws Exception {
-        ProductDTO newData = new ProductDTO("NEW TITLE", "TEST DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY_NAME, QUANTITY);
+        ProductDTO newData = new ProductDTO("NEW TITLE", "TEST DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
         String productDtoAsJson = objectMapper.writeValueAsString(newData);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.put("/products/" + NOT_EXISTING_ID)

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserRepositoryTest {
 
-    private static final String NAME = "Mikolaj";
+    private static final String NAME = "Zbigniew";
 
     private static final String NAME_2 = "Pawel";
     private User user;

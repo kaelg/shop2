@@ -118,6 +118,14 @@ public class RestResponseProductExceptionHandler {
         return new ResponseEntity<>(employeeException, employeeException.getHttpStatus());
     }
 
+    @ExceptionHandler(value = {InvalidBidAmountException.class})
+    public ResponseEntity<Object> handleInvalidBidAmount(InvalidBidAmountException  e) {
+        String errorMessage = messageSource.getMessage("invalidBidAmountException", new Object[]{}, Locale.getDefault());
+        ErrorInfo employeeException = new ErrorInfo(errorMessage, HttpStatus.CONFLICT, LocalDateTime.now());
+        log.error(errorMessage);
+        return new ResponseEntity<>(employeeException, employeeException.getHttpStatus());
+    }
+
     public String getFieldErrorsString(MethodArgumentNotValidException e) {
         StringBuilder sb = new StringBuilder();
         List<FieldError> errors = e.getFieldErrors();

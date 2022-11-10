@@ -1,6 +1,7 @@
 package pl.waw.great.shop.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import pl.waw.great.shop.config.AuctionType;
 import pl.waw.great.shop.config.CategoryType;
 
 import java.math.BigDecimal;
@@ -26,19 +27,21 @@ public class ProductDTO {
 
     private Long quantity;
 
+    private AuctionType auctionType;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     List<CommentDto> commentsList = new ArrayList<>();
-
 
     public ProductDTO() {
     }
 
-    public ProductDTO(String title, String description, BigDecimal price, CategoryType categoryName, Long quantity) {
+    public ProductDTO(String title, String description, BigDecimal price, CategoryType categoryName, Long quantity, AuctionType auctionType) {
         this.title = title;
         this.description = description;
         this.price = price;
         this.categoryName = categoryName;
         this.quantity = quantity;
+        this.auctionType = auctionType;
     }
 
     public Long getId() {
@@ -95,6 +98,14 @@ public class ProductDTO {
 
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
+    }
+
+    public AuctionType getAuctionType() {
+        return auctionType;
+    }
+
+    public void setAuctionType(AuctionType auctionType) {
+        this.auctionType = auctionType;
     }
 
     @Override

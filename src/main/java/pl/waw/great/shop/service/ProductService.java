@@ -77,6 +77,7 @@ public class ProductService {
         Product product = this.productRepository.findProductByTitle(title)
                 .orElseThrow(() -> new ProductWithGivenTitleNotExistsException(title));
 
+
         List<CommentDto> productCommentsDtos = product.getCommentsList()
                 .stream().map(commentMapper::commentToDto).collect(Collectors.toList());
 

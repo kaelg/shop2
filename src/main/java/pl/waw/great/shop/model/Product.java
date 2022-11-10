@@ -1,6 +1,8 @@
 package pl.waw.great.shop.model;
 
 
+import pl.waw.great.shop.config.AuctionType;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "PRODUCT")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -33,6 +36,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<CartLineItem> cartLineItemList;
 
+    private AuctionType auctionType;
     public Product() {
     }
 
@@ -131,6 +135,14 @@ public class Product {
 
     public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
+    }
+
+    public AuctionType getAuctionType() {
+        return auctionType;
+    }
+
+    public void setAuctionType(AuctionType auctionType) {
+        this.auctionType = auctionType;
     }
 
     @Override
