@@ -19,5 +19,8 @@
     <include file="db/migrations/010-init-users.sql" relativeToChangelogFile="true"/>
     <include file="db/migrations/011-add-cart.sql" relativeToChangelogFile="true"/>
     <include file="db/migrations/012-add-cart-line-items.sql" relativeToChangelogFile="true"/>
+    <include file="db/migrations/013-add-user-coin.sql" relativeToChangelogFile="true"/>
+    <include file="db/migrations/014-init-coins.sql" relativeToChangelogFile="true"/>
+
 
 </databaseChangeLog>

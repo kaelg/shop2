@@ -1,5 +1,6 @@
 package pl.waw.great.shop.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,8 @@ public class OrderService {
 
     private final CartRepository cartRepository;
 
+    private static final double coinsMultiplayer = 0.05;
+
     public OrderService(UserRepository userRepository, OrderRepository orderRepository, OrderMapper orderMapper, OrderLineMapper orderLineMapper, ProductRepository productRepository,CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
@@ -72,6 +75,8 @@ public class OrderService {
         OrderDto orderDto = orderMapper.orderToDto(this.orderRepository.create(order));
         this.updateProductsQuantity(orderItems);
         this.cartRepository.delete(cartByUserId.getId());
+        user.addCoins(countNumberOfCoinsForOrder(order.getTotalPrice()));
+        this.userRepository.updateUser(user);
         return orderDto;
     }
 
@@ -88,6 +93,10 @@ public class OrderService {
 
     public OrderDto getOrderById(@PathVariable String orderId) {
         return orderMapper.orderToDto(this.orderRepository.getOrderById(orderId));
+    }
+
+    private Long countNumberOfCoinsForOrder(BigDecimal orderAmount) {
+        return Math.round(orderAmount.longValue() * coinsMultiplayer);
     }
 
     private BigDecimal getOrderTotalAmount(List<OrderLineItem> orderItems) {

@@ -69,8 +69,11 @@ public class CartService {
         return cartMapper.cartToDto(this.cartRepository.update(cart));
     }
 
-    public CartDto getUserCart() {
-        Cart cartByUserId = this.cartRepository.findCartByUserId(this.getAuthenticatedUser().getId());
+    public CartDto getUserCart(String userName) {
+        User user = this.userRepository.findUserByTitle(userName)
+                .orElseThrow(() -> new UserWithGivenNameNotExistsException(userName));
+
+        Cart cartByUserId = this.cartRepository.findCartByUserId(user.getId());
         if (cartByUserId.getUser() == null) {
             cartByUserId.setUser(this.getAuthenticatedUser());
         }

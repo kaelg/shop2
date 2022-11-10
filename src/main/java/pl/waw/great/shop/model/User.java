@@ -24,6 +24,7 @@ public class User {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     Cart cart;
 
+    private Long coins;
 
     public User() {
     }
@@ -32,6 +33,7 @@ public class User {
         this.name = name;
         this.created = LocalDateTime.now();
         this.updated = LocalDateTime.now();
+        this.coins = 0L;
     }
 
     public Long getId() {
@@ -64,6 +66,18 @@ public class User {
 
     public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
+    }
+
+    public void addCoins(Long earnedCoins) {
+        this.coins += earnedCoins;
+    }
+
+    public Long getCoins() {
+        return coins;
+    }
+
+    public void setCoins(Long coins) {
+        this.coins = coins;
     }
 
     @Override

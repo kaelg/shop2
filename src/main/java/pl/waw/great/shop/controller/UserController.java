@@ -26,4 +26,9 @@ public class UserController {
     public boolean deleteUser(@PathVariable String name) {
         return this.userService.delete(name);
     }
+
+    @GetMapping
+    public Long getUserCoinsBalance() {
+        return this.userService.getUserCoinsBalance();
+    }
 }

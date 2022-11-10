@@ -16,9 +16,10 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @GetMapping
-    public CartDto getUserCart() {
-        return this.cartService.getUserCart();
+    @GetMapping("/{userName}")
+    public CartDto getUserCart(@PathVariable String userName) {
+
+        return this.cartService.getUserCart(userName);
     }
 
     @DeleteMapping("/{index}")

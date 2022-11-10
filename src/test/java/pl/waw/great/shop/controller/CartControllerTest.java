@@ -81,11 +81,13 @@ class CartControllerTest {
 
     @BeforeEach
     void setUp() {
+        this.user = this.userRepository.create(new User("Mikolaj"));
         this.category = categoryRepository.findCategoryByName(CategoryType.ELEKTRONIKA);
         this.product = new Product(PRODUCT_NAME, DESCRIPTION, PRICE, this.category, QUANTITY);
         this.productRepository.createProduct(this.product);
         this.cart = new Cart();
         this.cartLineItem = new CartLineItem(this.product, this.cart, 1, LocalDateTime.now(), LocalDateTime.now(), 2L);
+        this.cart.setTotalAmount(BigDecimal.valueOf(100));
         this.cart.addCartLineItem(this.cartLineItem);
         this.cart.setUser(this.user);
         this.cartRepository.create(cart);
@@ -93,14 +95,12 @@ class CartControllerTest {
 
     @AfterEach
     void tearDown() {
-        this.cartRepository.deleteAll();
-        this.userRepository.delete(this.user.getName());
     }
 
     @Test
-    @WithMockUser(roles = "User")
+    @WithMockUser(roles = "USER")
     void getCart() throws Exception {
-        MvcResult result = sendRequest(MockMvcRequestBuilders.get("/cart")
+        MvcResult result = sendRequest(MockMvcRequestBuilders.get("/cart/" + this.user.getName())
                 .content(String.valueOf(MediaType.APPLICATION_JSON)), HttpStatus.OK);
 
         CartDto cartDto = objectMapper.readValue(

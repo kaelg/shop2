@@ -46,5 +46,11 @@ public class UserRepository {
         return true;
     }
 
+    @Transactional
+    public User updateUser(User user) {
+        user.setUpdated(LocalDateTime.now());
+        this.entityManager.merge(user);
+        return user;
+    }
 
 }

@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -94,6 +95,7 @@ class OrderServiceTest {
         this.cartLineItem = new CartLineItem(this.product, this.cart, 1, LocalDateTime.now(), LocalDateTime.now(), 2L);
         this.cart.addCartLineItem(this.cartLineItem);
         this.order = new Order(BigDecimal.ONE, this.user, this.orderItems, LocalDateTime.now());
+        this.order.setId(UUID.randomUUID());
 
         ReflectionTestUtils.setField(
                 orderMapper,

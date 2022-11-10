@@ -140,7 +140,7 @@ class CartServiceTest {
         when(this.cartRepository.findCartByUserId(any())).thenReturn(this.cart);
         when(this.userRepository.findUserByTitle(anyString())).thenReturn(Optional.ofNullable(this.user));
 
-        CartDto userCart = this.cartService.getUserCart();
+        CartDto userCart = this.cartService.getUserCart(this.user.getName());
 
         assertEquals(userCart.getUserName(), this.user.getName());
     }

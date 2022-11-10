@@ -54,6 +54,7 @@ public class CartRepository {
         return true;
     }
 
+    @Transactional
     public void deleteAll() {
         this.entityManager.createQuery("delete from Cart").executeUpdate();
         this.entityManager.flush();

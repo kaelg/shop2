@@ -30,9 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserControllerTest {
 
-    private static final String NAME = "Lukasz";
+    private static final String NAME = "Jacek";
 
-    private static final String NAME_2 = "Pawel";
+    private static final String NAME_2 = "Bogdan";
 
     private static final String NOT_EXISTING_NAME = "Robert";
 
