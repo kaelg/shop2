@@ -37,4 +37,11 @@ public class OrderRepository {
         return query.getSingleResult();
     }
 
+    @Transactional
+    public boolean deleteAll() {
+        this.entityManager.createQuery("delete from OrderLineItem cascade").executeUpdate();
+        this.entityManager.createQuery("delete from Order cascade").executeUpdate();
+        this.entityManager.flush();
+        return true;
+    }
 }

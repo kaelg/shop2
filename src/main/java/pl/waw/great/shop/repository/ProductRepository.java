@@ -48,7 +48,7 @@ public class ProductRepository {
 
     @Transactional
     public boolean deleteAll() {
-        this.entityManager.createQuery("delete from Product").executeUpdate();
+        this.entityManager.createQuery("delete from Product cascade").executeUpdate();
         this.entityManager.flush();
         return true;
     }

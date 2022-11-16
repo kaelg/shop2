@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    username: cqholvmiibhqnj
+    url: jdbc:postgresql://ec2-99-81-16-126.eu-west-1.compute.amazonaws.com:5432/d1u8bric21g5gh
+    platform: postgres
+    password: b1525b7d68e9880f3f33b06e736245346b1ef14d509b27aa297ce837f086377a
+  sql:
+    init:
+      mode: always
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  quartz:
+    job-store-type: memory
+  jpa:
+    properties:
+      hibernate:
+        format_sql: 'true'
+    show-sql: 'true'
+  liquibase:
+    change-log: classpath:dbchangelog.xml
+coinsMultiplayer: 0.05;
+org:
+  quartz:
+    jobStore:
+      class: org.quartz.simpl.RAMJobStore

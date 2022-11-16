@@ -3,7 +3,6 @@ package pl.waw.great.shop.scheduler;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -15,7 +14,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -25,19 +23,13 @@ import static org.quartz.CronScheduleBuilder.cronSchedule;
 @Configuration
 @EnableAutoConfiguration
 @ConditionalOnExpression("'${using.spring.schedulerFactory}'=='true'")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yml")
 public class SchedulerConfig {
 
     Logger logger = LoggerFactory.getLogger(getClass());
-    @Autowired
-    private ApplicationContext applicationContext;
-
-    public SchedulerConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
 
     @Bean
-    public SpringBeanJobFactory springBeanJobFactory() {
+    public SpringBeanJobFactory springBeanJobFactory(ApplicationContext applicationContext) {
         AutoWiringSpringBeanJobFactory jobFactory = new AutoWiringSpringBeanJobFactory();
         logger.debug("Configuring Job factory");
 
@@ -57,9 +49,9 @@ public class SchedulerConfig {
     }
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
+    public SchedulerFactoryBean schedulerFactoryBean(ApplicationContext applicationContext) throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
-        factory.setJobFactory(springBeanJobFactory());
+        factory.setJobFactory(springBeanJobFactory(applicationContext));
         factory.setQuartzProperties(quartzProperties());
         return factory;
     }
@@ -82,6 +74,7 @@ public class SchedulerConfig {
                 .setJobData(jobDataMap)
                 .build();
     }
+
     public static Trigger buildTrigger(final Class<Job> jobClass) {
         String cronExpression = "0 0 30 * * ?";
         if (jobClass.getSimpleName().contains("Annual")) {
