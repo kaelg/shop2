@@ -1,6 +1,5 @@
 package pl.waw.great.shop.repository;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class OrderRepositoryTest {
@@ -35,7 +34,7 @@ class OrderRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.user = new User("John");
+        this.user = new User("John1");
         this.userRepository.create(user);
 
         this.order = Order.builder()
