@@ -22,7 +22,7 @@ public interface AuctionMapper {
 
     @Named("getStartDateString")
     default String getStartDateString(Auction auction) {
-        return auction.getStarts().format(formatter);
+        return auction.getStart().format(formatter);
     }
 
     @Named("getEndDateString")

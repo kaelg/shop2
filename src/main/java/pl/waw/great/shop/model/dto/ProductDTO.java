@@ -1,6 +1,7 @@
 package pl.waw.great.shop.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import pl.waw.great.shop.config.AuctionType;
 import pl.waw.great.shop.config.CategoryType;
 
@@ -10,7 +11,11 @@ import java.util.List;
 import java.util.Objects;
 import javax.validation.constraints.*;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 public class ProductDTO {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
@@ -30,83 +35,8 @@ public class ProductDTO {
     private AuctionType auctionType;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @Builder.Default
     List<CommentDto> commentsList = new ArrayList<>();
-
-    public ProductDTO() {
-    }
-
-    public ProductDTO(String title, String description, BigDecimal price, CategoryType categoryName, Long quantity, AuctionType auctionType) {
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.categoryName = categoryName;
-        this.quantity = quantity;
-        this.auctionType = auctionType;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public CategoryType getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(CategoryType categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public List<CommentDto> getCommentsList() {
-        return commentsList;
-    }
-
-    public void setCommentsList(List<CommentDto> commentsList) {
-        this.commentsList = commentsList;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
-
-    public AuctionType getAuctionType() {
-        return auctionType;
-    }
-
-    public void setAuctionType(AuctionType auctionType) {
-        this.auctionType = auctionType;
-    }
 
     @Override
     public boolean equals(Object o) {

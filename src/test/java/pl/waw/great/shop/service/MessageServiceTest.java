@@ -40,7 +40,12 @@ class MessageServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.message = new Message(TITLE, TEXT, CITY, EMAIL);
+        this.message = Message.builder()
+                .body(TEXT)
+                .title(TITLE)
+                .city(CITY)
+                .email(EMAIL)
+                .build();
         this.messageDto = new MessageDto(TITLE, TEXT, CITY, EMAIL);
     }
 

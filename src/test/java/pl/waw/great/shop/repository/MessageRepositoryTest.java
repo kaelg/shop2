@@ -26,7 +26,12 @@ class MessageRepositoryTest {
 
     @Test
     void create() {
-        Message message = new Message(TITLE, TEXT, CITY, EMAIL);
+        Message message = Message.builder()
+                .body(TEXT)
+                .title(TITLE)
+                .city(CITY)
+                .email(EMAIL)
+                .build();
         Message createdMessage = messageRepository.create(message);
 
         assertEquals(TITLE, createdMessage.getTitle());

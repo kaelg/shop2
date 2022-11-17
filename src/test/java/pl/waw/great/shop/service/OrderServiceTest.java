@@ -34,8 +34,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
-@Disabled
-//TODO FIXME
 class OrderServiceTest {
 
     private static final String PRODUCT_NAME = "iPhone 14";
@@ -87,14 +85,35 @@ class OrderServiceTest {
     void setUp() {
         this.user = new User(NAME);
         this.category = categoryRepository.findCategoryByName(CategoryType.ELEKTRONIKA);
-        this.product = new Product(PRODUCT_NAME, DESCRIPTION, PRICE, this.category, QUANTITY);
-        this.orderLineItem = new OrderLineItem(this.product, 2L);
+        this.product = Product.builder()
+                .title(PRODUCT_NAME)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .category(this.category)
+                .quantity(QUANTITY)
+                .build();
+        this.orderLineItem = OrderLineItem.builder()
+                .product(this.product)
+                .quantity(2L)
+                .build();
         this.orderItems.add(this.orderLineItem);
         this.cart = new Cart();
         this.cart.setUser(this.user);
-        this.cartLineItem = new CartLineItem(this.product, this.cart, 1, LocalDateTime.now(), LocalDateTime.now(), 2L);
+        this.cartLineItem = CartLineItem.builder()
+                .product(product)
+                .cart(cart)
+                .cartIndex(1)
+                .created(LocalDateTime.now())
+                .updated(LocalDateTime.now())
+                .quantity(2L)
+                .build();
         this.cart.addCartLineItem(this.cartLineItem);
-        this.order = new Order(BigDecimal.ONE, this.user, this.orderItems, LocalDateTime.now());
+        this.order = Order.builder()
+                .totalPrice(BigDecimal.ONE)
+                .user(user)
+                .orderLineItemList(this.orderItems)
+                .created(LocalDateTime.now())
+                .build();
         this.order.setId(UUID.randomUUID());
 
         ReflectionTestUtils.setField(

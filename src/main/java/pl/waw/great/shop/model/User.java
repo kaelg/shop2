@@ -1,5 +1,8 @@
 package pl.waw.great.shop.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,6 +10,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user_")
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -39,49 +44,8 @@ public class User {
         this.updated = LocalDateTime.now();
         this.coins = 0L;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(LocalDateTime updated) {
-        this.updated = updated;
-    }
-
     public void addCoins(Long earnedCoins) {
         this.coins += earnedCoins;
-    }
-
-    public Long getCoins() {
-        return coins;
-    }
-
-    public void setCoins(Long coins) {
-        this.coins = coins;
     }
 
     @Override

@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,8 +45,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Disabled
-//TODO FIXME
 class ProductControllerTest {
 
     private static final String PRODUCT_TITLE = "iPhone 14 PRO MAX";
@@ -106,19 +105,34 @@ class ProductControllerTest {
 
     @BeforeEach
     void setup() {
-        this.commentDto = new CommentDto(TEST_NAME, TEST_EMAIL, TEST_TEXT);
-        this.productDTO = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
-        this.category = new Category(CATEGORY_NAME.toString());
-        this.toUpdateDto = new ProductDTO(PRODUCT_TITLE_2, DESCRIPTION_2, PRICE_2, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        this.commentDto = CommentDto.builder()
+                .name(TEST_NAME)
+                .email(TEST_EMAIL)
+                .text(TEST_TEXT)
+                .build();
+
+        this.productDTO = ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
+
+        this.category = Category.builder().name(CATEGORY_NAME.toString()).build();
+        this.toUpdateDto = ProductDTO.builder()
+                .title(PRODUCT_TITLE_2)
+                .description(DESCRIPTION_2)
+                .price(PRICE_2)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         this.createdProductId = this.productService.createProduct(this.toUpdateDto).getId();
         this.commentService.createComment(this.toUpdateDto.getTitle(), this.commentDto);
     }
 
-    @AfterEach
-    void tearDown() {
-        this.commentRepository.deleteAll();
-        this.productService.deleteAllProducts();
-    }
 
     @Test
     @Transactional
@@ -153,7 +167,14 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void createWithBlankTitleShouldThrowException() throws Exception {
-        ProductDTO dtoWithBlankTitle = new ProductDTO("", DESCRIPTION, PRICE_2, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO dtoWithBlankTitle = ProductDTO.builder()
+                .title("")
+                .description(DESCRIPTION)
+                .price(PRICE_2)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         String productDtoAsJson = objectMapper.writeValueAsString(dtoWithBlankTitle);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.post("/products")
@@ -167,7 +188,14 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void createWithBlankDescriptionShouldThrowException() throws Exception {
-        ProductDTO dtoWithBlankDescription = new ProductDTO(PRODUCT_TITLE, "", PRICE_2, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO dtoWithBlankDescription = ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description("")
+                .price(PRICE_2)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         String productDtoAsJson = objectMapper.writeValueAsString(dtoWithBlankDescription);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.post("/products")
@@ -181,7 +209,14 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void createWithPriceZeroException() throws Exception {
-        ProductDTO dtoWithPriceZero = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, BigDecimal.ZERO, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO dtoWithPriceZero = ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(BigDecimal.ZERO)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         String productDtoAsJson = objectMapper.writeValueAsString(dtoWithPriceZero);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.post("/products")
@@ -209,7 +244,14 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void updateToDuplicateTitleShouldThrowException() throws Exception {
-        ProductDTO newData = new ProductDTO(PRODUCT_TITLE_2, "TEST DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO newData = ProductDTO.builder()
+                .title(PRODUCT_TITLE_2)
+                .description("TEST DESCRIPTION")
+                .price(BigDecimal.valueOf(1500))
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         String productDtoAsJson = objectMapper.writeValueAsString(newData);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.put("/products/" + this.createdProductId)
@@ -223,7 +265,14 @@ class ProductControllerTest {
     @Transactional
     @WithMockUser(roles = "USER")
     void updateWithNotExistingIdShouldThrowException() throws Exception {
-        ProductDTO newData = new ProductDTO("NEW TITLE", "TEST DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO newData = ProductDTO.builder()
+                .title("NEW TITLE")
+                .description("Test Description")
+                .price(BigDecimal.valueOf(1500))
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         String productDtoAsJson = objectMapper.writeValueAsString(newData);
 
         MvcResult result = sendRequest(MockMvcRequestBuilders.put("/products/" + NOT_EXISTING_ID)

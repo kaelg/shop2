@@ -1,7 +1,12 @@
 package pl.waw.great.shop.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotBlank;
 
+@Getter
+@Setter
 public class UserDto {
 
     @NotBlank(message = "{nameNotBlank}")
@@ -14,11 +19,4 @@ public class UserDto {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

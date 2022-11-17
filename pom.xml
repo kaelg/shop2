@@ -18,6 +18,8 @@
     <properties>
         <java.version>1.8</java.version>
         <org.mapstruct.version>1.5.2.Final</org.mapstruct.version>
+        <org.projectlombok.version>1.18.20</org.projectlombok.version>
+        <lombok-mapstruct-binding.version>0.1.0</lombok-mapstruct-binding.version>
     </properties>
     <dependencies>
         <dependency>
@@ -155,6 +157,17 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${org.projectlombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${lombok-mapstruct-binding.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -202,6 +215,16 @@
                                     <groupId>org.mapstruct</groupId>
                                     <artifactId>mapstruct-processor</artifactId>
                                     <version>${org.mapstruct.version}</version>
+                                </path>
+                                <path>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                    <version>${org.projectlombok.version}</version>
+                                </path>
+                                <path>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok-mapstruct-binding</artifactId>
+                                    <version>${lombok-mapstruct-binding.version}</version>
                                 </path>
                                 <!-- other annotation processors -->
                             </annotationProcessorPaths>

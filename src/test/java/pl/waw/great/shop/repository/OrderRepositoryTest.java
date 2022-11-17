@@ -37,7 +37,13 @@ class OrderRepositoryTest {
     void setUp() {
         this.user = new User("John");
         this.userRepository.create(user);
-        this.order = new Order(TOTAL_PRICE, user, orderLineItemList, LocalDateTime.now() );
+
+        this.order = Order.builder()
+                .totalPrice(TOTAL_PRICE)
+                .user(user)
+                .orderLineItemList(orderLineItemList)
+                .created(LocalDateTime.now())
+                .build();
     }
 
     @Test

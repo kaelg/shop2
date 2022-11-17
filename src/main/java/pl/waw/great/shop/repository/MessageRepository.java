@@ -6,6 +6,7 @@ import pl.waw.great.shop.model.Message;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.time.LocalDateTime;
 
 @Repository
 public class MessageRepository {
@@ -15,8 +16,8 @@ public class MessageRepository {
 
     @Transactional
     public Message create(Message message) {
-        message.setCreated();
-        message.setUpdated();
+        message.setCreated(LocalDateTime.now());
+        message.setUpdated(LocalDateTime.now());
         this.entityManager.persist(message);
         return message;
     }

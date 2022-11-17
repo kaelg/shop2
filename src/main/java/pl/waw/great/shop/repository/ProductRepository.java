@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +20,8 @@ public class ProductRepository {
 
     @Transactional
     public Product createProduct(Product product) {
-        product.setCreated();
-        product.setUpdated();
+        product.setCreated(LocalDateTime.now());
+        product.setUpdated(LocalDateTime.now());
         this.entityManager.persist(product);
         return product;
     }
@@ -41,7 +42,7 @@ public class ProductRepository {
 
     @Transactional
     public Product updateProduct(Product product) {
-        product.setUpdated();
+        product.setUpdated(LocalDateTime.now());
         this.entityManager.merge(product);
         return this.getProudctWithCategory(product.getId());
     }

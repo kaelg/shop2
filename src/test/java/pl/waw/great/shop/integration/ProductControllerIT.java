@@ -52,7 +52,14 @@ class ProductControllerIT {
     @BeforeEach
     public void setUp() {
 
-        this.productToUpdate = new ProductDTO(PRODUCT_TITLE_2, DESCRIPTION_2, PRICE_2, CATEGORY, QUANTITY, AuctionType.KUP_TERAZ);
+        this.productToUpdate = ProductDTO.builder()
+                .title(PRODUCT_TITLE_2)
+                .description(DESCRIPTION_2)
+                .price(PRICE_2)
+                .categoryName(CATEGORY)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
 
         requestSpecification = new RequestSpecBuilder()
                 .setBaseUri("http://localhost:8080/")
@@ -86,7 +93,14 @@ class ProductControllerIT {
 
     @Test
     void createProduct() {
-        ProductDTO newProduct = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO newProduct = ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .categoryName(CATEGORY)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         ProductDTO createdProductDto = given().spec(requestSpecification).body(newProduct)
                 .when().post()
                 .then().spec(responseSpecification).extract().body().as(ProductDTO.class);
@@ -97,7 +111,14 @@ class ProductControllerIT {
 
     @Test
     void updateProduct() {
-        ProductDTO newProductData = new ProductDTO("NEW_TITLE", "NEW_DESCRIPTION", BigDecimal.valueOf(1500), CATEGORY, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO newProductData = ProductDTO.builder()
+                .title("NEW TITLE")
+                .description("NEW_DESCRPTION")
+                .price(BigDecimal.valueOf(1500))
+                .categoryName(CATEGORY)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
 
         ProductDTO updatedProductDto = given().pathParam("id", productToUpdateId)
                 .spec(requestSpecification).body(newProductData)

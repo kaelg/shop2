@@ -14,6 +14,7 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.method.P;
 import pl.waw.great.shop.config.AuctionType;
 import pl.waw.great.shop.config.CategoryType;
 import pl.waw.great.shop.exception.ProductWithGivenTitleExists;
@@ -51,7 +52,8 @@ class ProductServiceImplTest {
 
     private static final CategoryType CATEGORY_NAME = CategoryType.ELEKTRONIKA;
 
-    private static final Category CATEGORY = new Category(CATEGORY_NAME.toString());
+    private static final Category CATEGORY = Category.builder().name(CATEGORY_NAME.toString()).build();
+
 
     private static final Long QUANTITY = 5L;
 
@@ -76,8 +78,14 @@ class ProductServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        this.product = new Product(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY, QUANTITY);
-        this.category = new Category(CATEGORY_NAME.name());
+        this.product = Product.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .category(this.category)
+                .quantity(QUANTITY)
+                .build();
+        this.category = Category.builder().name(CATEGORY_NAME.toString()).build();
         this.product.setCategory(category);
     }
 
@@ -90,7 +98,14 @@ class ProductServiceImplTest {
     void createProduct() {
         when(this.productRepository.createProduct(any())).thenReturn(this.product);
         when(this.categoryRepository.findCategoryByName(any())).thenReturn(this.category);
-        ProductDTO createdProduct = this.productService.createProduct(new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ));
+        ProductDTO createdProduct = this.productService.createProduct(ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build());
         assertEquals(PRODUCT_TITLE, createdProduct.getTitle());
         assertEquals(DESCRIPTION, createdProduct.getDescription());
         assertEquals(PRICE, createdProduct.getPrice());
@@ -98,7 +113,14 @@ class ProductServiceImplTest {
 
     @Test
     void createProductWithDuplicateTitleShouldThrowException() {
-        ProductDTO dto = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO dto = ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
         when(this.productRepository.findProductByTitle(anyString())).thenReturn(Optional.of(this.product));
 
         Assertions.assertThrows(ProductWithGivenTitleExists.class, () -> {
@@ -109,8 +131,22 @@ class ProductServiceImplTest {
 
     @Test
     void updateProduct() {
-        ProductDTO dtoToUpdate = new ProductDTO(UPDATED_TITLE, UPDATED_DESCRIPTION, UPDATED_PRICE, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
-        Product updated = new Product(UPDATED_TITLE, UPDATED_DESCRIPTION, UPDATED_PRICE, this.category, QUANTITY);
+        ProductDTO dtoToUpdate = ProductDTO.builder()
+                .title(UPDATED_TITLE)
+                .description(UPDATED_DESCRIPTION)
+                .price(UPDATED_PRICE)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
+
+        Product updated = Product.builder()
+                .title(UPDATED_TITLE)
+                .description(UPDATED_DESCRIPTION)
+                .price(UPDATED_PRICE)
+                .category(this.category)
+                .quantity(QUANTITY).build();
+
         when(this.productRepository.getProduct(anyLong())).thenReturn(this.product);
         when(this.productRepository.updateProduct(any())).thenReturn(updated);
         ProductDTO saved = this.productService.updateProduct(1L, dtoToUpdate);
@@ -120,7 +156,15 @@ class ProductServiceImplTest {
 
     @Test
     void updateToDuplicateTitleShouldThrowException() {
-        ProductDTO dto = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CATEGORY_NAME, QUANTITY, AuctionType.KUP_TERAZ);
+        ProductDTO dto = ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .categoryName(CATEGORY_NAME)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
+
         when(this.productRepository.findProductByTitle(anyString())).thenReturn(Optional.of(this.product));
         Assertions.assertThrows(ProductWithGivenTitleExists.class, () -> {
             this.productService.updateProduct(1L, dto);

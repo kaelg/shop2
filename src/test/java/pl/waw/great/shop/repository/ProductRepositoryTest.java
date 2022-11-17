@@ -1,6 +1,6 @@
 package pl.waw.great.shop.repository;
 
-import org.junit.jupiter.api.AfterEach;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import pl.waw.great.shop.model.Category;
 import pl.waw.great.shop.model.Product;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,58 +38,66 @@ class ProductRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
-
     private Product product;
 
     @BeforeEach
     void setUp() {
         this.category = categoryRepository.findCategoryByName(CategoryType.ELEKTRONIKA);
-        this.product = new Product(PRODUCT_NAME, DESCRIPTION, PRICE, this.category, QUANTITY);
+        this.product = Product.builder()
+                .title(PRODUCT_NAME)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .category(this.category)
+                .quantity(QUANTITY)
+                .build();
         this.productRepository.createProduct(this.product);
     }
 
-    @AfterEach
-    void tearDown() {
-        this.orderRepository.deleteAll();
-        this.productRepository.deleteAll();
-    }
 
     @Test
+    @Transactional
     void create() {
         assertNotNull(this.product.getId());
-        this.productRepository.createProduct(new Product("title", "ddses", BigDecimal.valueOf(15), this.category, QUANTITY));
+        this.productRepository.createProduct(Product.builder()
+                .title("title")
+                .description("description")
+                .price(BigDecimal.valueOf(15))
+                .category(this.category)
+                .quantity(QUANTITY).build());
     }
 
     @Test
+    @Transactional
     void get() {
         Product savedProduct = this.productRepository.getProduct(this.product.getId());
         assertNotNull(savedProduct);
     }
 
     @Test
+    @Transactional
     void delete() {
         boolean isDeleted = this.productRepository.deleteProduct(this.product.getId());
         assertTrue(isDeleted);
     }
 
     @Test
+    @Transactional
     void update() {
-        Product newProduct = new Product(PRODUCT_NAME_2, DESCRIPTION_2, PRICE_2, this.category, QUANTITY);
+        Product newProduct = Product.builder()
+                .title(PRODUCT_NAME_2)
+                .description(DESCRIPTION_2)
+                .price(PRICE_2)
+                .category(this.category)
+                .quantity(QUANTITY)
+                .build();
         newProduct.setId(this.product.getId());
         Product updatedProduct = this.productRepository.updateProduct(newProduct);
         assertEquals(updatedProduct, newProduct);
     }
 
-    @Test
-    void findAllProducts() {
-        this.productRepository.createProduct(new Product(PRODUCT_NAME_2, DESCRIPTION_2, PRICE_2, this.category, QUANTITY ));
-        List<Product> allProducts = this.productRepository.findAllProducts();
-        assertTrue( allProducts.size() > 1);
-    }
 
     @Test
+    @Transactional
     void findProductByTitle() {
         Optional<Product> productByTitle = this.productRepository.findProductByTitle(PRODUCT_NAME);
 

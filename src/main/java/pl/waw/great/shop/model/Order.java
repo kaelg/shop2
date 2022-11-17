@@ -1,6 +1,8 @@
 package pl.waw.great.shop.model;
 
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -10,6 +12,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "order_")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Order {
 
     @Id
@@ -25,56 +32,6 @@ public class Order {
     private List<OrderLineItem> orderLineItemList;
 
     private LocalDateTime created;
-
-    public Order() {
-    }
-
-    public Order(BigDecimal totalPrice, User user, List<OrderLineItem> orderLineItemList, LocalDateTime created) {
-        this.totalPrice = totalPrice;
-        this.user = user;
-        this.orderLineItemList = orderLineItemList;
-        this.created = created;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<OrderLineItem> getOrderLineItemList() {
-        return orderLineItemList;
-    }
-
-    public void setOrderLineItemList(List<OrderLineItem> orderLineItemList) {
-        this.orderLineItemList = orderLineItemList;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
 
     @Override
     public boolean equals(Object o) {

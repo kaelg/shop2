@@ -41,12 +41,15 @@ public class CartService {
         Cart cart = this.cartRepository.findCartByUserId(user.getId());
 
         cart.setUser(user);
-        CartLineItem cartLineItem = new CartLineItem(product,
-                cart,
-                cart.getSize() + 1,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                amount);
+
+        CartLineItem cartLineItem = CartLineItem.builder().
+                product(product)
+                .cart(cart)
+                .cartIndex(cart.getSize() + 1)
+                .created(LocalDateTime.now())
+                .updated(LocalDateTime.now())
+                .quantity(amount)
+                .build();
 
         if (amount + cart.getProductInCartAmount(cartLineItem) > product.getQuantity()) {
             throw new InsufficientProductQuantityException(productTitle, product.getQuantity());

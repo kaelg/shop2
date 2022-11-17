@@ -1,24 +1,14 @@
 package pl.waw.great.shop.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class OrderLineDto {
 
     private String productTitle;
+
     private Long quantity;
 
-    public String getProductTitle() {
-        return productTitle;
-    }
-
-    public void setProductTitle(String productTitle) {
-        this.productTitle = productTitle;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
 }

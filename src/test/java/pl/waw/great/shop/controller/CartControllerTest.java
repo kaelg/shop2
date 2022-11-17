@@ -39,8 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-//TODO @FIXME
-@Disabled
 class CartControllerTest {
 
     private static final String PRODUCT_NAME = "iPhone 14";
@@ -81,12 +79,26 @@ class CartControllerTest {
 
     @BeforeEach
     void setUp() {
-        this.user = this.userRepository.create(new User("Mikolaj"));
+        this.user = this.userRepository.create(new User("John"));
         this.category = categoryRepository.findCategoryByName(CategoryType.ELEKTRONIKA);
-        this.product = new Product(PRODUCT_NAME, DESCRIPTION, PRICE, this.category, QUANTITY);
+        this.product = Product.builder()
+                .title(PRODUCT_NAME)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .category(this.category)
+                .quantity(QUANTITY)
+                .build();
+
         this.productRepository.createProduct(this.product);
         this.cart = new Cart();
-        this.cartLineItem = new CartLineItem(this.product, this.cart, 1, LocalDateTime.now(), LocalDateTime.now(), 2L);
+        this.cartLineItem = CartLineItem.builder()
+                .product(product)
+                .cart(cart)
+                .cartIndex(1)
+                .created(LocalDateTime.now())
+                .updated(LocalDateTime.now())
+                .quantity(2L)
+                .build();
         this.cart.setTotalAmount(BigDecimal.valueOf(100));
         this.cart.addCartLineItem(this.cartLineItem);
         this.cart.setUser(this.user);

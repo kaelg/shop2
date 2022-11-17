@@ -94,7 +94,14 @@ public class AuctionService {
             throw new InvalidBidAmountException();
         }
 
-        Bid bid = new Bid(amount, user, auction, LocalDateTime.now(), LocalDateTime.now());
+        Bid bid = Bid.builder()
+                .amount(amount)
+                .user(user)
+                .auction(auction)
+                .created(LocalDateTime.now())
+                .updated(LocalDateTime.now())
+                .build();
+
         auction.addBid(bid);
 
         return auctionMapper.auctionToDto(this.auctionRepository.update(auction));
@@ -154,11 +161,12 @@ public class AuctionService {
     }
 
     private Bid createInitBid(Auction auction) {
-        return new Bid(auction.getPrice(),
-                this.getAuthenticatedUser(),
-                auction,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+        return Bid.builder()
+                .amount(auction.getPrice())
+                .auction(auction)
+                .created(LocalDateTime.now())
+                .updated(LocalDateTime.now())
+                .build();
     }
 
 }

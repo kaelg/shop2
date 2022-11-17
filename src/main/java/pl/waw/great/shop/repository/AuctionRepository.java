@@ -9,6 +9,7 @@ import pl.waw.great.shop.model.Auction;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
@@ -35,7 +36,7 @@ public class AuctionRepository {
 
     @Transactional
     public Auction update(Auction auction) {
-        auction.setUpdated();
+        auction.setUpdated(LocalDateTime.now());
         this.entityManager.merge(auction);
         return this.findAuctionByTitle(auction.getTitle()).get();
     }

@@ -40,7 +40,7 @@ public class OrderService {
 
     private static final double coinsMultiplayer = 0.05;
 
-    public OrderService(UserRepository userRepository, OrderRepository orderRepository, OrderMapper orderMapper, OrderLineMapper orderLineMapper, ProductRepository productRepository,CartRepository cartRepository) {
+    public OrderService(UserRepository userRepository, OrderRepository orderRepository, OrderMapper orderMapper, OrderLineMapper orderLineMapper, ProductRepository productRepository, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
@@ -63,11 +63,12 @@ public class OrderService {
             throw new CartIsEmptyException();
         }
 
-
-        Order order = new Order(getOrderTotalAmount(orderItems),
-                user,
-                orderItems,
-                LocalDateTime.now());
+        Order order = Order.builder()
+                .totalPrice(getOrderTotalAmount(orderItems))
+                .user(user)
+                .orderLineItemList(orderItems)
+                .created(LocalDateTime.now())
+                .build();
 
         OrderDto orderDto = orderMapper.orderToDto(this.orderRepository.create(order));
         this.updateProductsQuantity(orderItems);
@@ -116,12 +117,19 @@ public class OrderService {
     }
 
     public OrderDto createAuctionWinnerOrder(Auction auction, User winner) {
-        OrderLineItem orderLineItem = new OrderLineItem(auction, auction.getQuantity());
+        OrderLineItem orderLineItem = OrderLineItem.builder()
+                .product(auction)
+                .quantity(auction.getQuantity())
+                .build();
+
         List<OrderLineItem> orderLineItems = Collections.singletonList(orderLineItem);
-        Order order = new Order(auction.getPrice(),
-                winner,
-                orderLineItems,
-                LocalDateTime.now());
+
+        Order order = Order.builder()
+                .totalPrice(auction.getPrice())
+                .user(winner)
+                .orderLineItemList(orderLineItems)
+                .created(LocalDateTime.now())
+                .build();
 
         OrderDto orderDto = orderMapper.orderToDto(this.orderRepository.create(order));
         this.updateProductsQuantity(orderLineItems);

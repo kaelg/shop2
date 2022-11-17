@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -22,8 +23,8 @@ public class CategoryRepository {
     @Transactional
     public Category addProductToCategory(Product product, Category category) {
         category.addProduct(product);
-        category.setCreated();
-        category.setUpdated();
+        category.setCreated(LocalDateTime.now());
+        category.setUpdated(LocalDateTime.now());
         this.entityManager.persist(category);
 
         return category;

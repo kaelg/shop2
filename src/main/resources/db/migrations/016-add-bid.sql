@@ -12,5 +12,5 @@ CREATE TABLE IF NOT EXISTS bid
     FOREIGN KEY (user_id)
     REFERENCES user_(id)  ON DELETE CASCADE,
     FOREIGN KEY (auction_id)
-    REFERENCES auction (id)  ON DELETE CASCADE
+    REFERENCES auction_ (id)  ON DELETE CASCADE
 );

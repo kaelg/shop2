@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.parameters.P;
 import pl.waw.great.shop.config.CategoryType;
 import pl.waw.great.shop.exception.InvalidCommentIndexException;
 import pl.waw.great.shop.exception.ProductWithGivenTitleExists;
@@ -47,7 +48,7 @@ class CommentServiceTest {
     private static final Long QUANTITY = 5L;
 
     private Category category;
-    private  Product product;
+    private Product product;
 
     private CommentDto comment;
 
@@ -65,9 +66,19 @@ class CommentServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.category = new Category(CategoryType.ELEKTRONIKA.toString());
-        this.product = new Product(PRODUCT_TITLE, DESCRIPTION, PRICE, this.category, QUANTITY);
-        this.comment = new CommentDto(TEST_NAME, TEST_EMAIL, TEST_TEXT);
+        this.category = Category.builder().name(CategoryType.ELEKTRONIKA.toString()).build();
+        this.product = Product.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .category(this.category)
+                .quantity(QUANTITY)
+                .build();
+        this.comment = CommentDto.builder()
+                .name(TEST_NAME)
+                .email(TEST_EMAIL)
+                .text(TEST_TEXT)
+                .build();
         this.product.addComment(commentMapper.dtoToComment(this.comment));
     }
 

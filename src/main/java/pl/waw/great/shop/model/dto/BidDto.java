@@ -1,8 +1,15 @@
 package pl.waw.great.shop.model.dto;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class BidDto {
 
     private BigDecimal amount;
@@ -11,27 +18,4 @@ public class BidDto {
 
     private String productTitle;
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getProductTitle() {
-        return productTitle;
-    }
-
-    public void setProductTitle(String productTitle) {
-        this.productTitle = productTitle;
-    }
 }

@@ -46,12 +46,13 @@ public class TestController {
 
             int index = random.nextInt(CategoryType.values().length - 1);
 
-            ProductDTO productDTO = new ProductDTO("product" + i,
-                    "test description",
-                    BigDecimal.valueOf(Long.parseLong(randomNumeric(1, 5))),
-                    CategoryType.values()[index],
-                    2L,
-                    AuctionType.KUP_TERAZ);
+            ProductDTO productDTO = ProductDTO.builder()
+                    .title("product" + i)
+                    .description("test description")
+                    .price(BigDecimal.valueOf(Long.parseLong(randomNumeric(1,5))))
+                    .quantity(2L)
+                    .auctionType(AuctionType.KUP_TERAZ)
+                    .build();
             this.productService.createProduct(productDTO);
         }
         counter += count;

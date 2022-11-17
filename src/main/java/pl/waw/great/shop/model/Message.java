@@ -1,5 +1,7 @@
 package pl.waw.great.shop.model;
 
+import lombok.*;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +12,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "message")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,68 +27,6 @@ public class Message {
     private String email;
     private LocalDateTime created;
     private LocalDateTime updated;
-
-    public Message() {
-    }
-
-    public Message(String title, String body, String city, String email) {
-        this.title = title;
-        this.body = body;
-        this.city = city;
-        this.email = email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated() {
-        this.created = LocalDateTime.now();
-    }
-
-    public LocalDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated() {
-        this.updated = LocalDateTime.now();
-    }
 
     @Override
     public boolean equals(Object o) {

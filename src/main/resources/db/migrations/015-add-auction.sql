@@ -1,7 +1,7 @@
 --liquibase formatted sql
 
 --changeset liquibase:15
-CREATE TABLE IF NOT EXISTS auction
+CREATE TABLE IF NOT EXISTS auction_
 (
     id          bigint NOT NULL PRIMARY KEY,
     starts    timestamp,

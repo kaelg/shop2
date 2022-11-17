@@ -31,13 +31,13 @@ public class TestDataLoader {
 
     public void generateTestProducts() {
         List<Product> productList = IntStream.range(0, 1000)
-                .mapToObj(product -> new Product(
-                        randomAlphanumeric(randomDataGenerator.nextInt(2, 10)),
-                        randomAlphanumeric(randomDataGenerator.nextInt(2, 20)),
-                        BigDecimal.valueOf(Long.parseLong(randomNumeric(1, 5))),
-                        new Category(CategoryType.EDUKACJA.toString()),
-                        Long.parseLong(randomNumeric(1,3))
-                )).collect(Collectors.toList());
+                .mapToObj(product ->
+                        Product.builder()
+                                .title(randomAlphanumeric(randomDataGenerator.nextInt(2, 10)))
+                                .description(randomAlphanumeric(randomDataGenerator.nextInt(2, 10)))
+                                .price(BigDecimal.valueOf(Long.parseLong(randomNumeric(1, 5))))
+                                .category(Category.builder().name(CategoryType.EDUKACJA.toString()).build())
+                                .quantity(Long.parseLong(randomNumeric(1, 3))).build()).collect(Collectors.toList());
 
         productList.forEach(this.productRepository::createProduct);
     }

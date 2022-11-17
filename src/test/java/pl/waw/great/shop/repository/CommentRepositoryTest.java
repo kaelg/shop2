@@ -30,7 +30,11 @@ class CommentRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        this.comment = this.commentRepository.create(new Comment(TEST_NAME, TEST_EMAIL, TEST_TEXT));
+        this.comment = this.commentRepository.create(Comment.builder()
+                .name(TEST_NAME)
+                .email(TEST_EMAIL)
+                .text(TEST_TEXT)
+                .build());
     }
 
     @AfterEach

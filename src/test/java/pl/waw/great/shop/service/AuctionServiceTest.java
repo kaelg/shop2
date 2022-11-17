@@ -8,9 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.quartz.SchedulerException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.access.method.P;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.util.ReflectionTestUtils;
 import pl.waw.great.shop.config.AuctionType;
@@ -20,7 +18,6 @@ import pl.waw.great.shop.model.dto.AuctionDto;
 import pl.waw.great.shop.model.dto.ProductDTO;
 import pl.waw.great.shop.model.mapper.AuctionMapper;
 import pl.waw.great.shop.model.mapper.BidMapper;
-import pl.waw.great.shop.model.mapper.OrderLineMapper;
 import pl.waw.great.shop.model.mapper.ProductMapper;
 import pl.waw.great.shop.repository.*;
 import pl.waw.great.shop.scheduler.EndAuctionJobService;
@@ -97,12 +94,33 @@ class AuctionServiceTest {
         this.auction.setTitle(PRODUCT_TITLE);
         this.auction.setStart(LocalDateTime.now());
         this.auction.setEnds(LocalDateTime.now());
-        this.bid = new Bid(BigDecimal.valueOf(100), this.user, this.auction, LocalDateTime.now(), LocalDateTime.now());
+        this.bid = Bid.builder()
+                .amount(BigDecimal.valueOf(100))
+                .user(this.user)
+                .auction(this.auction)
+                .updated(LocalDateTime.now())
+                .created(LocalDateTime.now())
+                .build();
+
         this.bidList.add(bid);
         this.auction.setBids(this.bidList);
-        this.category = new Category("INNE");
-        this.product = new Product(PRODUCT_TITLE, DESCRIPTION, PRICE, this.category, QUANTITY);
-        this.productDto = new ProductDTO(PRODUCT_TITLE, DESCRIPTION, PRICE, CategoryType.EDUKACJA, QUANTITY, AuctionType.KUP_TERAZ);
+        this.category = Category.builder().name("INNE").build();
+        this.product = Product.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .category(this.category)
+                .quantity(QUANTITY)
+                .build();
+
+        this.productDto = ProductDTO.builder()
+                .title(PRODUCT_TITLE)
+                .description(DESCRIPTION)
+                .price(PRICE)
+                .categoryName(CategoryType.EDUKACJA)
+                .quantity(QUANTITY)
+                .auctionType(AuctionType.KUP_TERAZ)
+                .build();
 
         ReflectionTestUtils.setField(
                 auctionMapper,
@@ -142,7 +160,7 @@ class AuctionServiceTest {
         when(this.auctionRepository.update(auction)).thenReturn(this.auction);
         AuctionDto bidedAuction = this.auctionService.bid(PRODUCT_TITLE, BigDecimal.valueOf(1000));
 
-        assertEquals(2 ,bidedAuction.getBids().size());
+        assertEquals(2, bidedAuction.getBids().size());
 
     }
 
